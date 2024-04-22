@@ -17,6 +17,10 @@ cv2.createTrackbar('Upper-V', "Trackbars", 255, 255, nothing)
 
 # Path to the directory containing images
 path_to_images = 'samples'
+output_directory = 'outputs'
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+    
 image_files = [f for f in os.listdir(path_to_images) if f.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Define the structuring element for morphological operation
@@ -68,6 +72,10 @@ for file in image_files:
 
         # Segment the largest contour from the original image
         segmented_image = cv2.bitwise_and(eroded, eroded, mask=contour_mask)
+
+        # Save the segmented image
+        output_path = os.path.join(output_directory, f"segmented_{file}")
+        cv2.imwrite(output_path, segmented_image)
 
         # Display the result
         cv2.imshow('Original', image)
